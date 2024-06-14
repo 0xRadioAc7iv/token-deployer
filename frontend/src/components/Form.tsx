@@ -1,4 +1,12 @@
+import {
+  connect,
+  createDataItemSigner,
+  message,
+  result,
+} from "@permaweb/aoconnect";
 import React, { useState } from "react";
+import tokenContract from "../utils/token";
+import { AOModule, AOScheduler } from "../utils/constants";
 
 const Form = () => {
   const [formState, setFormState] = useState({
@@ -17,10 +25,49 @@ const Form = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function spawnProcess() {
+    const ao = connect();
+
+    const result = await ao.spawn({
+      module: AOModule,
+      scheduler: AOScheduler,
+      signer: createDataItemSigner(window.arweaveWallet),
+    });
+
+    return result;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic to handle form submission and deploy the contract
-    console.log(formState);
+
+    const process = await spawnProcess();
+
+    try {
+      console.log(process);
+      const signer = createDataItemSigner(window.arweaveWallet);
+
+      const msg = await message({
+        process: process,
+        data: tokenContract(
+          formState.initialBalance,
+          formState.name,
+          formState.ticker,
+          formState.denomination,
+          formState.logo
+        ),
+        signer,
+        tags: [{ name: "Action", value: "Eval" }],
+      });
+
+      let { Output } = await result({
+        message: msg,
+        process: process,
+      });
+
+      console.log("Output: ", Output);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   return (
