@@ -43,7 +43,6 @@ const Form = () => {
     const process = await spawnProcess();
 
     try {
-      console.log(process);
       const signer = createDataItemSigner(window.arweaveWallet);
 
       const msg = await message({
@@ -59,14 +58,18 @@ const Form = () => {
         tags: [{ name: "Action", value: "Eval" }],
       });
 
-      let { Output } = await result({
+      const { Output } = await result({
         message: msg,
         process: process,
       });
 
-      console.log("Output: ", Output);
+      if (Output !== undefined) {
+        alert(`Your Token's Process ID: ${process}`);
+      } else {
+        alert("Could not Deploy your Token! Please try again.");
+      }
     } catch (error) {
-      console.log("Error: ", error);
+      alert(`There was an error: ${error}`);
     }
   };
 
@@ -88,6 +91,7 @@ const Form = () => {
             value={formState.name}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
+            required
           />
         </div>
 
@@ -99,6 +103,7 @@ const Form = () => {
             value={formState.ticker}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
+            required
           />
         </div>
 
@@ -110,6 +115,7 @@ const Form = () => {
             value={formState.logo}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
+            required
           />
         </div>
 
@@ -121,6 +127,7 @@ const Form = () => {
             value={formState.denomination}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
+            required
           />
         </div>
 
@@ -132,6 +139,7 @@ const Form = () => {
             value={formState.initialBalance}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
+            required
           />
         </div>
         <div className="flex justify-center">
