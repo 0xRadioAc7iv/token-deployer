@@ -42,6 +42,9 @@ const Form = () => {
 
     const process = await spawnProcess();
 
+    // To add some delay (so that the process is found on the gateway)
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     try {
       const signer = createDataItemSigner(window.arweaveWallet);
 
