@@ -7,15 +7,18 @@ import {
 import React, { useState } from "react";
 import tokenContract from "../utils/token";
 import { AOModule, AOScheduler } from "../utils/constants";
+import { useActiveAddress } from "arweave-wallet-kit";
 
 const Form = () => {
   const [formState, setFormState] = useState({
     name: "Points Coin",
     ticker: "PNTS",
-    logo: "SBCCXwwecBlDqRLUjb8dYABExTJXLieawf7m2aBJ-KY",
+    logo: "https://image.url",
     denomination: 12,
     initialBalance: 10000,
   });
+
+  const address = useActiveAddress();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,6 +42,11 @@ const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!address) {
+      alert("Please connect your wallet to deploy your token!");
+      return;
+    }
 
     const process = await spawnProcess();
 
