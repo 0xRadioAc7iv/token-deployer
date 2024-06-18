@@ -8,11 +8,8 @@ const TokenList = () => {
 
   const displayProcess = processes?.map((process) => {
     return (
-      <div key={process} className="p-2">
-        <button
-          onClick={() => checkToken(process)}
-          className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
-        >
+      <div key={process} className="flex flex-col justify-center w-full p-2">
+        <button onClick={() => checkToken(process)} className="">
           {process}
         </button>
       </div>
@@ -49,9 +46,11 @@ const TokenList = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Token Processes</h1>
-      <div className="grid grid-cols-1 gap-4">{displayProcess}</div>
+    <div className="p-4">
+      <h1 className="text-2xl flex justify-center font-bold mb-4">
+        Token Processes
+      </h1>
+      <div className="border">{displayProcess}</div>
     </div>
   );
 };
