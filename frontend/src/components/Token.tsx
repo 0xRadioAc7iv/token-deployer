@@ -110,7 +110,7 @@ const Token = () => {
           { name: "Quantity", value: mintAmount },
         ],
       });
-      const { Messages } = await result({
+      await result({
         message: msg,
         process,
       });
@@ -137,7 +137,7 @@ const Token = () => {
           { name: "Quantity", value: transferAmount },
         ],
       });
-      const { Messages } = await result({
+      await result({
         message: msg,
         process,
       });
@@ -211,7 +211,7 @@ const Token = () => {
                   Logo:
                 </td>
                 <td className="px-4 py-2 border-b border-gray-200">
-                  <img src={logo} alt="Logo" className="inline-block w-6 h-6" />
+                  <p className="rounded-md truncate">{logo}</p>
                 </td>
               </tr>
               <tr>

@@ -8,11 +8,9 @@ const TokenList = () => {
 
   const displayProcess = processes?.map((process) => {
     return (
-      <div key={process} className="flex flex-col justify-center w-full p-2">
-        <button onClick={() => checkToken(process)} className="">
-          fefieofneovgneovgno
-        </button>
-      </div>
+      <button key={process} onClick={() => checkToken(process)}>
+        {process}
+      </button>
     );
   });
 
@@ -50,7 +48,9 @@ const TokenList = () => {
       <h1 className="text-2xl flex justify-center font-bold mb-4">
         Token Processes
       </h1>
-      <div className="border w-1/2 flex justify-center bg-white rounded-md shadow-md p-4">{displayProcess}</div>
+      <div className="flex flex-col gap-y-4 border w-1/2 justify-start bg-white rounded-md shadow-md p-4">
+        {displayProcess}
+      </div>
     </div>
   );
 };
