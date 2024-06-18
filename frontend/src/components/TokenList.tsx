@@ -10,7 +10,7 @@ const TokenList = () => {
     return (
       <div key={process} className="flex flex-col justify-center w-full p-2">
         <button onClick={() => checkToken(process)} className="">
-          {process}
+          fefieofneovgneovgno
         </button>
       </div>
     );
@@ -46,11 +46,11 @@ const TokenList = () => {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-700 h-screen flex justify-center items-center flex-col">
       <h1 className="text-2xl flex justify-center font-bold mb-4">
         Token Processes
       </h1>
-      <div className="border">{displayProcess}</div>
+      <div className="border w-1/2 flex justify-center bg-white rounded-md shadow-md p-4">{displayProcess}</div>
     </div>
   );
 };
