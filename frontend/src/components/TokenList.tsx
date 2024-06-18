@@ -5,10 +5,16 @@ import { useNavigate } from "react-router-dom";
 const TokenList = () => {
   const navigate = useNavigate();
   const [processes, setProcesses] = useState([]);
+
   const displayProcess = processes?.map((process) => {
     return (
-      <div key={process}>
-        <button onClick={() => checkToken(process)}>{process}</button>
+      <div key={process} className="p-2">
+        <button
+          onClick={() => checkToken(process)}
+          className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+        >
+          {process}
+        </button>
       </div>
     );
   });
@@ -42,7 +48,12 @@ const TokenList = () => {
     getMessages();
   }, []);
 
-  return <div>{displayProcess}</div>;
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Token Processes</h1>
+      <div className="grid grid-cols-1 gap-4">{displayProcess}</div>
+    </div>
+  );
 };
 
 export default TokenList;
