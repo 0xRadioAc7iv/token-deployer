@@ -20,9 +20,10 @@ const Form = () => {
     denomination: 12,
     initialBalance: 10000,
   });
+  const [isDeploying, setIsDeploying] = useState(false);
+  const [processId, setProcessId] = useState("");
 
   const address = useActiveAddress();
-  console.log(address);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,14 +53,19 @@ const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsDeploying(true);
 
     if (!address) {
       toast.error("Please connect your wallet to deploy your token!");
+      setIsDeploying(false);
       return;
     }
 
     const process = await spawnProcess();
-    if (!process) return;
+    if (!process) {
+      setIsDeploying(false);
+      return;
+    }
 
     // To add some delay (so that the process is found on the gateway)
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -88,6 +94,7 @@ const Form = () => {
 
       if (Output !== undefined) {
         toast.success(`Your Token's Process ID: ${process}`);
+        setProcessId(process);
 
         await message({
           process: "byU9XxUliRVDy1lxaZ1zX0GNDa56zV8rU2dm3jd9DiA",
@@ -105,11 +112,13 @@ const Form = () => {
       toast.error(
         "There was an error during token deployment. Please try again."
       );
+    } finally {
+      setIsDeploying(false);
     }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-700">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-700">
       <Navbar />
       <form
         onSubmit={handleSubmit}
@@ -181,12 +190,24 @@ const Form = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-black text-white py-2 px-4 rounded hover:bg-gray-900 transition-colors duration-200"
+            className={`bg-black text-white py-2 px-4 rounded transition-colors duration-200 ${
+              isDeploying
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-900"
+            }`}
+            disabled={isDeploying}
           >
-            Deploy
+            {isDeploying ? "Deploying..." : "Deploy"}
           </button>
         </div>
       </form>
+      {processId && (
+        <div className="my-4 p-4 bg-white rounded-md shadow-md w-[500px]">
+          <p className="text-gray-900">
+            <strong>Process ID:</strong> {processId}
+          </p>
+        </div>
+      )}
       <ToastContainer />
     </div>
   );
