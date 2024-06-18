@@ -9,6 +9,8 @@ import tokenContract from "../utils/token";
 import { AOModule, AOScheduler } from "../utils/constants";
 import { useActiveAddress } from "arweave-wallet-kit";
 import Navbar from "./Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Form = () => {
   const [formState, setFormState] = useState({
@@ -33,26 +35,31 @@ const Form = () => {
   async function spawnProcess() {
     const ao = connect();
 
-    const result = await ao.spawn({
-      module: AOModule,
-      scheduler: AOScheduler,
-      signer: createDataItemSigner(window.arweaveWallet),
-    });
-    console.log(result);
-    return result;
+    try {
+      const result = await ao.spawn({
+        module: AOModule,
+        scheduler: AOScheduler,
+        signer: createDataItemSigner(window.arweaveWallet),
+      });
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Failed to spawn process:", error);
+      toast.error("Failed to spawn process. Please try again.");
+      return null;
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Inside function");
 
     if (!address) {
-      alert("Please connect your wallet to deploy your token!");
+      toast.error("Please connect your wallet to deploy your token!");
       return;
     }
-    console.log("yo");
+
     const process = await spawnProcess();
-    console.log(process);
+    if (!process) return;
 
     // To add some delay (so that the process is found on the gateway)
     await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -80,7 +87,7 @@ const Form = () => {
       });
 
       if (Output !== undefined) {
-        alert(`Your Token's Process ID: ${process}`);
+        toast.success(`Your Token's Process ID: ${process}`);
 
         await message({
           process: "byU9XxUliRVDy1lxaZ1zX0GNDa56zV8rU2dm3jd9DiA",
@@ -91,10 +98,13 @@ const Form = () => {
           ],
         });
       } else {
-        alert("Could not Deploy your Token! Please try again.");
+        toast.error("Could not deploy your token! Please try again.");
       }
     } catch (error) {
-      alert(`There was an error: ${error}`);
+      console.error("Error during token deployment:", error);
+      toast.error(
+        "There was an error during token deployment. Please try again."
+      );
     }
   };
 
@@ -177,6 +187,7 @@ const Form = () => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };
