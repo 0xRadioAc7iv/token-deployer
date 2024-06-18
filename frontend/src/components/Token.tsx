@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 
 const Token = () => {
-  const { params } = useParams();
+  const { process } = useParams();
 
   return (
     <button>
-      <p>{params}</p>
+      <p>{process}</p>
     </button>
   );
 };

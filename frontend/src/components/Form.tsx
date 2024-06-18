@@ -51,7 +51,7 @@ const Form = () => {
     const process = await spawnProcess();
 
     // To add some delay (so that the process is found on the gateway)
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     try {
       const signer = createDataItemSigner(window.arweaveWallet);
@@ -76,6 +76,15 @@ const Form = () => {
 
       if (Output !== undefined) {
         alert(`Your Token's Process ID: ${process}`);
+
+        await message({
+          process: "byU9XxUliRVDy1lxaZ1zX0GNDa56zV8rU2dm3jd9DiA",
+          signer,
+          tags: [
+            { name: "Action", value: "Update" },
+            { name: "Process", value: process },
+          ],
+        });
       } else {
         alert("Could not Deploy your Token! Please try again.");
       }
@@ -119,7 +128,7 @@ const Form = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Logo</label>
+          <label className="block text-gray-700">Logo (Image URL)</label>
           <input
             type="text"
             name="logo"
