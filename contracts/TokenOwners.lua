@@ -15,12 +15,32 @@ Handlers.add(
 )
 
 Handlers.add(
+    "getTokenProcesses",
+    Handlers.utils.hasMatchingTag("Action", "Get-Token-Processes"),
+    function(msg)
+        local data = json.encode(Owners[msg.From])
+        ao.send({
+            Target = msg.From,
+            Data = data
+        })
+    end
+)
+
+Handlers.add(
     "getOwners",
     Handlers.utils.hasMatchingTag("Action", "Get-Owners"),
     function(msg)
-        ao.send({
-            Target = msg.From,
-            Data = json.encode(Owners)
-        })
+        if (msg.From == ao.id) then
+            local data = json.encode(Owners)
+            ao.send({
+                Target = msg.From,
+                Data = data
+            })
+        else
+            ao.send({
+                Target = msg.From,
+                Data = "Unauthorized Request"
+            })
+        end
     end
 )

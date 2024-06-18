@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 const TokenList = () => {
   const navigate = useNavigate();
   const [processes, setProcesses] = useState([]);
-  const displayProcess = processes.map((process) => {
+  const displayProcess = processes?.map((process) => {
     return (
-      <div>
+      <div key={process}>
         <button onClick={() => checkToken(process)}>{process}</button>
       </div>
     );

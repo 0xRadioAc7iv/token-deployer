@@ -1,10 +1,10 @@
-function tokenContract(amount: number, name: string, ticker: string, denomination: number, logo: string) {
+function tokenContract(amount: number, name: string, ticker: string, denomination: number, logo: string, address: string) {
     return `
     local bint = require('.bint')(256)
     local ao = require('ao')
     local json = require('json')
     
-    if not Balances then Balances = { [ao.id] = tostring(bint(${amount} * 1e12)) } end
+    if not Balances then Balances = { ['${address}'] = tostring(bint(${amount} * 1e12)) } end
     if Name ~= '${name}' then Name = '${name}' end
     if Ticker ~= '${ticker}' then Ticker = '${ticker}' end
     if Denomination ~= ${denomination} then Denomination = ${denomination} end
@@ -111,9 +111,9 @@ function tokenContract(amount: number, name: string, ticker: string, denominatio
             assert(type(msg.Quantity) == 'string', 'Quantity is required!')
             assert(bint.__lt(0, msg.Quantity), 'Quantity must be greater than zero!')
             
-            if not Balances[ao.id] then Balances[ao.id] = "0" end
+            if not Balances['${address}'] then Balances['${address}'] = "0" end
             
-            if msg.From == ao.id then
+            if msg.From == '${address}' then
                 Balances[msg.From] = tostring(bint.__add(Balances[Owner], msg.Quantity))
                 
                 ao.send({
